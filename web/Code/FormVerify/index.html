@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>智能表单输入提示与验证系统</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+  <main class="app-shell">
+    <header class="page-header" aria-labelledby="page-title">
+      <h1 id="page-title">智能表单输入提示与验证系统</h1>
+      <p>
+        使用 HTML、CSS、JavaScript 实现静态表单页面，并引入朴素贝叶斯分类器和规则引擎，对密码强度与邮箱风险进行实时提示。
+      </p>
+    </header>
+
+    <div class="workspace-grid">
+      <section class="panel form-panel" aria-label="用户注册表单">
+        <h2>用户注册表单</h2>
+
+        <form id="registerForm" novalidate>
+          <label class="field">
+            <span class="field-label">用户名</span>
+            <input id="username" name="username" type="text" autocomplete="username" value="student01">
+            <small id="usernameHint">请输入至少 2 个字符。</small>
+          </label>
+
+          <label class="field">
+            <span class="field-label">邮箱</span>
+            <input id="email" name="email" type="email" autocomplete="email" value="abc@mailinator.com">
+            <small id="emailHint">会自动检查邮箱格式与一次性邮箱域名。</small>
+          </label>
+
+          <label class="field">
+            <span class="field-label">密码</span>
+            <div class="password-row">
+              <input id="password" name="password" type="password" autocomplete="new-password" value="kzde5577">
+              <button class="ghost-button" id="togglePassword" type="button" aria-label="显示或隐藏密码">显示</button>
+            </div>
+            <small id="passwordHint">建议至少 8 位，并混合大小写、数字和符号。</small>
+            <div class="strength-meter" aria-hidden="true">
+              <span id="strengthBar"></span>
+            </div>
+          </label>
+
+          <label class="field">
+            <span class="field-label">确认密码</span>
+            <input id="confirmPassword" name="confirmPassword" type="password" autocomplete="new-password" value="kzde5578">
+            <small id="confirmHint">请再次输入同一密码。</small>
+          </label>
+
+          <button class="submit-button" type="submit">提交注册</button>
+          <p class="submit-message" id="submitMessage" role="status" aria-live="polite"></p>
+        </form>
+      </section>
+
+      <aside class="panel insight-panel" aria-label="实时智能提示">
+        <h2>实时智能提示</h2>
+
+        <div class="signal-list" aria-label="验证摘要">
+          <div class="signal-row">
+            <span>密码强度分析</span>
+            <strong class="badge muted" id="passwordBadge">待输入</strong>
+          </div>
+          <div class="signal-row">
+            <span>邮箱风险判断</span>
+            <strong class="badge muted" id="emailBadge">待输入</strong>
+          </div>
+        </div>
+
+        <section class="reason-box" id="adviceBox" aria-labelledby="reason-title">
+          <h3 id="reason-title">系统判断依据</h3>
+          <ul id="adviceList">
+            <li>填写表单后，这里会展示模型和规则引擎给出的建议。</li>
+          </ul>
+        </section>
+
+        <div class="resource-strip" aria-label="资源加载状态">
+          <div class="resource-item">
+            <span class="status-dot" id="modelDot"></span>
+            <div>
+              <strong>密码模型</strong>
+              <p id="modelStatus">正在加载模型...</p>
+            </div>
+          </div>
+          <div class="resource-item">
+            <span class="status-dot" id="emailDot"></span>
+            <div>
+              <strong>邮箱规则库</strong>
+              <p id="emailStatus">正在加载规则...</p>
+            </div>
+          </div>
+        </div>
+
+        <section class="sample-section" aria-labelledby="sample-title">
+          <h3 id="sample-title">可测试样例</h3>
+          <div class="case-list">
+            <button type="button" data-sample="weak">弱密码样例</button>
+            <button type="button" data-sample="medium">中等样例</button>
+            <button type="button" data-sample="strong">强密码样例</button>
+            <button type="button" data-sample="riskyEmail">邮箱样例</button>
+          </div>
+        </section>
+      </aside>
+    </div>
+  </main>
+
+  <script src="./js/app.js"></script>
+</body>
+</html>
