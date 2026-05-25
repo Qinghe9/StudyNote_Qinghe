@@ -1,0 +1,20 @@
+# AI 自适应学习系统依赖
+# Python >= 3.8
+
+# 核心 (纯Python，无外部依赖)
+# 如需扩展，可取消注释以下依赖:
+
+# Web框架 (如需部署API)
+# fastapi>=0.100.0
+# uvicorn>=0.23.0
+
+# AI/LLM 集成 (可选)
+# openai>=1.0.0
+# anthropic>=0.8.0
+
+# 数据持久化 (可选)
+# sqlalchemy>=2.0.0
+# redis>=4.6.0
+
+# 工具库
+# pydantic>=2.0.0
