@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduMesh - 多Agent智能教育系统</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="app">
+        <!-- 登录/注册页面 -->
+        <div id="auth-page" class="page active">
+            <div class="auth-container">
+                <div class="logo">
+                    <div class="logo-icon">🧠</div>
+                    <h1>EduMesh</h1>
+                    <p class="subtitle">多Agent智能教育与个性化学习系统</p>
+                    <div class="architecture-badge">
+                        <span class="badge">Mesh架构</span>
+                        <span class="badge">事件驱动</span>
+                        <span class="badge">5-Agent协作</span>
+                    </div>
+                </div>
+                <div class="auth-card">
+                    <h2>开始学习</h2>
+                    <p class="auth-desc">输入你的名字，AI导师团队将为你定制个性化学习路径</p>
+                    <div class="input-group">
+                        <input type="text" id="student-name" placeholder="你的名字" maxlength="20">
+                        <button id="start-btn" class="btn-primary">
+                            <span>进入学习</span>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="agent-preview">
+                        <div class="agent-item">
+                            <div class="agent-dot assessment"></div>
+                            <span>Assessment Agent (BKT评估)</span>
+                        </div>
+                        <div class="agent-item">
+                            <div class="agent-dot curriculum"></div>
+                            <span>Curriculum Agent (SM-2路径)</span>
+                        </div>
+                        <div class="agent-item">
+                            <div class="agent-dot tutor"></div>
+                            <span>Tutor Agent (苏格拉底式)</span>
+                        </div>
+                        <div class="agent-item">
+                            <div class="agent-dot engagement"></div>
+                            <span>Engagement Agent (状态监测)</span>
+                        </div>
+                        <div class="agent-item">
+                            <div class="agent-dot hint"></div>
+                            <span>Hint Agent (三级提示)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 主学习页面 -->
+        <div id="learning-page" class="page">
+            <!-- 顶部导航 -->
+            <header class="main-header">
+                <div class="header-left">
+                    <div class="logo-small">🧠 EduMesh</div>
+                    <div class="connection-status">
+                        <div class="status-dot" id="ws-status"></div>
+                        <span id="ws-text">连接中...</span>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <div class="student-info">
+                        <div class="avatar" id="student-avatar"></div>
+                        <span id="student-name-display"></span>
+                    </div>
+                    <div class="engagement-meter">
+                        <span>参与度</span>
+                        <div class="meter-bar">
+                            <div class="meter-fill" id="engagement-fill"></div>
+                        </div>
+                        <span id="engagement-value">100%</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="main-layout">
+                <!-- 左侧：学习区域 -->
+                <div class="learning-area">
+                    <!-- 题目卡片 -->
+                    <div class="question-card" id="question-card">
+                        <div class="question-header">
+                            <span class="subject-tag" id="subject-tag">数学</span>
+                            <span class="difficulty" id="difficulty-tag">难度: 0.5</span>
+                        </div>
+                        <div class="question-content" id="question-content">
+                            加载中...
+                        </div>
+                        <div class="options-list" id="options-list">
+                        </div>
+                        <div class="answer-input-area" id="answer-input-area" style="display:none;">
+                            <input type="text" id="text-answer" placeholder="输入你的答案...">
+                        </div>
+                        <div class="question-actions">
+                            <button id="submit-btn" class="btn-primary" disabled>提交答案</button>
+                            <button id="hint-btn" class="btn-secondary">💡 需要提示</button>
+                        </div>
+                    </div>
+
+                    <!-- 结果反馈 -->
+                    <div class="feedback-area" id="feedback-area" style="display:none;">
+                        <div class="feedback-card" id="feedback-card">
+                            <div class="feedback-icon" id="feedback-icon"></div>
+                            <div class="feedback-content">
+                                <h3 id="feedback-title"></h3>
+                                <p id="feedback-message"></p>
+                                <div class="mastery-update" id="mastery-update"></div>
+                            </div>
+                        </div>
+                        <button id="next-btn" class="btn-primary">下一题 →</button>
+                    </div>
+
+                    <!-- 苏格拉底对话区域 -->
+                    <div class="tutor-chat" id="tutor-chat">
+                        <div class="chat-header">
+                            <div class="tutor-avatar">👨‍🏫</div>
+                            <div>
+                                <h4>AI导师 (Tutor Agent)</h4>
+                                <span class="tutor-mode">苏格拉底式教学模式</span>
+                            </div>
+                        </div>
+                        <div class="chat-messages" id="chat-messages">
+                            <div class="message system">
+                                <div class="message-bubble">
+                                    你好！我是你的AI导师。我不会直接给你答案，而是通过提问引导你思考。准备好了吗？
+                                </div>
+                                <span class="message-time">刚刚</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 右侧：数据面板 -->
+                <div class="data-panel">
+                    <!-- 掌握度总览 -->
+                    <div class="panel-card">
+                        <h3>📊 知识点掌握度</h3>
+                        <div class="mastery-list" id="mastery-list">
+                            <div class="empty-state">开始答题后将显示掌握度数据</div>
+                        </div>
+                    </div>
+
+                    <!-- SM-2复习计划 -->
+                    <div class="panel-card">
+                        <h3>🗓️ 复习计划 (SM-2)</h3>
+                        <div class="review-plan" id="review-plan">
+                            <div class="empty-state">暂无复习计划</div>
+                        </div>
+                    </div>
+
+                    <!-- 事件流可视化 -->
+                    <div class="panel-card events-panel">
+                        <h3>⚡ 实时事件流 (Mesh架构)</h3>
+                        <div class="events-list" id="events-list">
+                        </div>
+                    </div>
+
+                    <!-- Agent状态 -->
+                    <div class="panel-card">
+                        <h3>🤖 Agent状态</h3>
+                        <div class="agent-status-list">
+                            <div class="agent-status" id="status-assessment">
+                                <div class="status-dot assessment"></div>
+                                <span>Assessment</span>
+                                <span class="status-text">待命</span>
+                            </div>
+                            <div class="agent-status" id="status-curriculum">
+                                <div class="status-dot curriculum"></div>
+                                <span>Curriculum</span>
+                                <span class="status-text">待命</span>
+                            </div>
+                            <div class="agent-status" id="status-tutor">
+                                <div class="status-dot tutor"></div>
+                                <span>Tutor</span>
+                                <span class="status-text">待命</span>
+                            </div>
+                            <div class="agent-status" id="status-engagement">
+                                <div class="status-dot engagement"></div>
+                                <span>Engagement</span>
+                                <span class="status-text">监测中</span>
+                            </div>
+                            <div class="agent-status" id="status-hint">
+                                <div class="status-dot hint"></div>
+                                <span>Hint</span>
+                                <span class="status-text">待命</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
